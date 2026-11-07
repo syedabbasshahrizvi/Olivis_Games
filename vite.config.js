@@ -1,9 +1,21 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
+// base "./" makes every asset path relative, so the build works on GitHub Pages
+// under any repository name (https://user.github.io/<repo>/) without edits.
 export default defineConfig({
+  base: "./",
   plugins: [react()],
-  // Replace 'YOUR-REPOSITORY-NAME' with your exact GitHub repository name.
-  // If deploying to https://USERNAME.github.io/ (user site), use '/' instead.
-  base: '/YOUR-REPOSITORY-NAME/',
-})
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          motion: ["framer-motion"],
+        },
+      },
+    },
+  },
+});
